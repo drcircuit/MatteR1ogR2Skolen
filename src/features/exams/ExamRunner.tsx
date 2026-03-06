@@ -50,9 +50,11 @@ export function ExamRunner({ title, questions, durationMinutes, courseId: _cours
     setAnswers((prev) => new Map(prev).set(current, { answer, correct }))
   }
 
-  const handleMCAnswer = (correct: boolean) => {
-    // MC vil ikke gi answer tekst, bruk index
-    setAnswers((prev) => new Map(prev).set(current, { answer: correct ? 'riktig' : 'feil', correct }))
+  const handleMCAnswer = (assessment: { correct: boolean; submittedAnswer?: string }) => {
+    setAnswers((prev) => new Map(prev).set(current, {
+      answer: assessment.submittedAnswer ?? (assessment.correct ? 'riktig' : 'feil'),
+      correct: assessment.correct,
+    }))
   }
 
   const progress = ((current + 1) / questions.length) * 100
@@ -105,7 +107,7 @@ export function ExamRunner({ title, questions, durationMinutes, courseId: _cours
         ) : (
           <FreeResponse
             exercise={question}
-            onAnswer={(attempted) => handleAnswer(attempted, '')}
+            onAnswer={(assessment) => handleAnswer(assessment.correct, assessment.submittedAnswer ?? '')}
             disabled={submitted}
           />
         )}

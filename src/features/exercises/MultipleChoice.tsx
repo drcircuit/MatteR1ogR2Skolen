@@ -6,7 +6,12 @@ import clsx from 'clsx'
 
 interface MultipleChoiceProps {
   exercise: MultipleChoiceExercise
-  onAnswer: (correct: boolean) => void
+  onAnswer: (assessment: {
+    correct: boolean
+    submittedAnswer?: string
+    assessmentFeedback?: string
+    assessmentScore?: number
+  }) => void
   showHint?: boolean
   disabled?: boolean
 }
@@ -21,7 +26,12 @@ export function MultipleChoice({ exercise, onAnswer, showHint = true, disabled =
   const handleSubmit = () => {
     if (selected === null) return
     setSubmitted(true)
-    onAnswer(isCorrect)
+    onAnswer({
+      correct: isCorrect,
+      submittedAnswer: exercise.options[selected],
+      assessmentFeedback: isCorrect ? 'Riktig svar.' : 'Feil svar.',
+      assessmentScore: isCorrect ? 100 : 0,
+    })
   }
 
   const handleReset = () => {

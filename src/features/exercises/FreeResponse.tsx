@@ -2,30 +2,62 @@ import { useState } from 'react'
 import type { FreeResponseExercise } from '@/types'
 import { Button } from '@/components/ui/Button'
 import { LessonContent } from '@/features/lessons/LessonContent'
+import { assessFreeResponseAnswer } from '@/lib/openai/exerciseAssessmentService'
+import { useSettingsStore } from '@/store/settingsStore'
+
+const PASSING_SCORE_THRESHOLD = 60
 
 interface FreeResponseProps {
   exercise: FreeResponseExercise
-  onAnswer: (attempted: boolean) => void
+  onAnswer: (assessment: {
+    correct: boolean
+    submittedAnswer?: string
+    assessmentFeedback?: string
+    assessmentScore?: number
+  }) => void
   disabled?: boolean
 }
 
 export function FreeResponse({ exercise, onAnswer, disabled = false }: FreeResponseProps) {
+  const openaiApiKey = useSettingsStore((s) => s.openaiApiKey)
+  const aiModel = useSettingsStore((s) => s.aiModel)
   const [userAnswer, setUserAnswer] = useState('')
   const [showSolution, setShowSolution] = useState(false)
   const [showHint, setShowHint] = useState(false)
   const [attempted, setAttempted] = useState(false)
+  const [isEvaluating, setIsEvaluating] = useState(false)
+  const [assessment, setAssessment] = useState<{ score: number; feedback: string; method: 'openai' | 'lokal' } | null>(null)
 
-  const handleAttempt = () => {
+  const handleAttempt = async () => {
     if (!userAnswer.trim()) return
+    setIsEvaluating(true)
+    const evaluation = await assessFreeResponseAnswer(exercise, userAnswer, openaiApiKey, aiModel)
+    setAssessment(evaluation)
     setAttempted(true)
-    onAnswer(true)
+    onAnswer({
+      correct: evaluation.score >= PASSING_SCORE_THRESHOLD,
+      submittedAnswer: userAnswer.trim(),
+      assessmentFeedback: evaluation.feedback,
+      assessmentScore: evaluation.score,
+    })
+    setIsEvaluating(false)
   }
 
   const handleReveal = () => {
     setShowSolution(true)
     if (!attempted) {
       setAttempted(true)
-      onAnswer(false)
+      setAssessment({
+        score: 0,
+        feedback: 'Ingen innlevering registrert. Oppgaven ble hoppet over.',
+        method: 'lokal',
+      })
+      onAnswer({
+        correct: false,
+        submittedAnswer: '',
+        assessmentFeedback: 'Oppgaven ble hoppet over uten innlevering.',
+        assessmentScore: 0,
+      })
     }
   }
 
@@ -77,11 +109,25 @@ export function FreeResponse({ exercise, onAnswer, disabled = false }: FreeRespo
         </div>
       )}
 
+      {assessment && (
+        <div className={`rounded-xl p-4 border ${assessment.score >= 60 ? 'bg-green-50 border-green-200' : 'bg-amber-50 border-amber-200'}`}>
+          <p className={`font-semibold mb-1 ${assessment.score >= 60 ? 'text-green-800' : 'text-amber-800'}`}>
+            Vurdering: {assessment.score}%
+          </p>
+          <p className={`text-sm ${assessment.score >= 60 ? 'text-green-700' : 'text-amber-700'}`}>
+            {assessment.feedback}
+          </p>
+          <p className="text-xs text-gray-500 mt-2">
+            Metode: {assessment.method === 'openai' ? 'OpenAI-vurdering' : 'Lokal vurdering'}
+          </p>
+        </div>
+      )}
+
       {/* Knapper */}
       <div className="flex gap-3 flex-wrap">
         {!attempted && !showSolution && (
-          <Button onClick={handleAttempt} disabled={!userAnswer.trim() || disabled}>
-            Levér svar
+          <Button onClick={handleAttempt} disabled={!userAnswer.trim() || disabled || isEvaluating}>
+            {isEvaluating ? 'Vurderer…' : 'Levér svar'}
           </Button>
         )}
         {!showSolution && (

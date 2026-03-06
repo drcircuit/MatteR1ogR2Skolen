@@ -96,9 +96,9 @@ export function LessonViewer({ lesson, module, courseId, nextLesson, prevLesson 
             className="mt-3"
             variant="success"
             size="sm"
-            onClick={() => navigate(`/kurs/${courseId}/modul/${module.id}/oppgaver`)}
+            onClick={() => navigate(`/kurs/${courseId}/modul/${module.id}/leksjon/${lesson.id}/oppgaver`)}
           >
-            Gå til oppgaver →
+            Gå til leksjonsoppgaver →
           </Button>
         </div>
       )}

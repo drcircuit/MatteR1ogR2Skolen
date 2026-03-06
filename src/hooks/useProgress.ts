@@ -7,6 +7,7 @@ export function useProgress() {
   const user = useAuthStore((s) => s.user)
   const {
     completedLessons,
+    exerciseResults,
     quizResults,
     examResults,
     isLoaded,
@@ -56,8 +57,21 @@ export function useProgress() {
       if (user) completeLesson(user.id, lessonId, moduleId, courseId)
     },
     recordExercise: (exerciseId: string, moduleId: string, courseId: CourseId, correct: boolean) => {
-      if (user) recordExercise(user.id, exerciseId, moduleId, courseId, correct)
+      if (user) {
+        recordExercise(user.id, exerciseId, moduleId, courseId, {
+          correct,
+        })
+      }
     },
+    recordExerciseAssessment: (
+      exerciseId: string,
+      moduleId: string,
+      courseId: CourseId,
+      assessment: Parameters<typeof recordExercise>[4],
+    ) => {
+      if (user) recordExercise(user.id, exerciseId, moduleId, courseId, assessment)
+    },
+    getExerciseResult: (exerciseId: string) => exerciseResults.find((r) => r.exerciseId === exerciseId),
     recordQuizResult: (quizId: string, moduleId: string, courseId: CourseId, score: number, correct: number, total: number) => {
       if (user) {
         recordQuizResult({

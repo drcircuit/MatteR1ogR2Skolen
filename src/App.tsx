@@ -67,6 +67,14 @@ export default function App() {
           }
         />
         <Route
+          path="/kurs/:courseId/modul/:moduleId/leksjon/:lessonId/oppgaver"
+          element={
+            <ProtectedRoute>
+              <AppLayout><ExercisePage /></AppLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
           path="/kurs/:courseId/modul/:moduleId/quiz"
           element={
             <ProtectedRoute>

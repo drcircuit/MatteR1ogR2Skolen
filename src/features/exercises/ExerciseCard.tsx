@@ -1,4 +1,4 @@
-import type { Exercise, CourseId } from '@/types'
+import type { Exercise, CourseId, ExerciseResult } from '@/types'
 import { MultipleChoice } from './MultipleChoice'
 import { FreeResponse } from './FreeResponse'
 import { Card } from '@/components/ui/Card'
@@ -8,9 +8,15 @@ interface ExerciseCardProps {
   exercise: Exercise
   index: number
   courseId: CourseId
-  onAnswer: (correct: boolean) => void
+  onAnswer: (assessment: {
+    correct: boolean
+    submittedAnswer?: string
+    assessmentFeedback?: string
+    assessmentScore?: number
+  }) => void
   disabled?: boolean
   showHints?: boolean
+  latestResult?: ExerciseResult
 }
 
 const difficultyLabel = {
@@ -19,7 +25,7 @@ const difficultyLabel = {
   vanskelig: { label: 'Vanskelig', variant: 'danger' as const },
 }
 
-export function ExerciseCard({ exercise, index, courseId: _courseId, onAnswer, disabled, showHints }: ExerciseCardProps) {
+export function ExerciseCard({ exercise, index, courseId: _courseId, onAnswer, disabled, showHints, latestResult }: ExerciseCardProps) {
   const diff = difficultyLabel[exercise.difficulty]
 
   return (
@@ -28,6 +34,15 @@ export function ExerciseCard({ exercise, index, courseId: _courseId, onAnswer, d
         <span className="text-sm font-semibold text-gray-500">Oppgave {index + 1}</span>
         <Badge variant={diff.variant}>{diff.label}</Badge>
       </div>
+      {latestResult && (
+        <div className={`mb-4 rounded-lg border px-3 py-2 text-xs ${
+          latestResult.correct ? 'bg-green-50 border-green-200 text-green-800' : 'bg-amber-50 border-amber-200 text-amber-800'
+        }`}>
+          Sist levert: {new Date(latestResult.answeredAt).toLocaleString('nb-NO')} ·
+          resultat {latestResult.assessmentScore ?? (latestResult.correct ? 100 : 0)}% ·
+          forsøk {latestResult.attemptCount}
+        </div>
+      )}
       {exercise.type === 'multiple-choice' ? (
         <MultipleChoice
           exercise={exercise}

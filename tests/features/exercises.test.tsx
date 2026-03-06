@@ -52,7 +52,7 @@ describe('MultipleChoice', () => {
       await user.click(allOptionBtns[2] as HTMLElement)
       const svarKnapp = screen.getByRole('button', { name: /Svar/ })
       await user.click(svarKnapp)
-      expect(onAnswer).toHaveBeenCalledWith(true)
+      expect(onAnswer).toHaveBeenCalledWith(expect.objectContaining({ correct: true, assessmentScore: 100 }))
     }
   })
 
@@ -87,7 +87,8 @@ describe('FreeResponse', () => {
 
     const leverBtn = screen.getByRole('button', { name: /Levér svar/ })
     await user.click(leverBtn)
-    expect(onAnswer).toHaveBeenCalledWith(true)
+    expect(onAnswer).toHaveBeenCalledWith(expect.objectContaining({ correct: true }))
+    expect(screen.getByText(/Vurdering:/)).toBeInTheDocument()
   })
 
   it('kan vise løsning direkte', async () => {

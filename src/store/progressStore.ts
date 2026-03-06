@@ -5,20 +5,22 @@ import {
   saveExerciseResult,
   saveQuizResult,
   getCompletedLessons,
+  getExerciseResults,
   getQuizResults,
   getExamResults,
 } from '@/lib/storage/db'
-import type { QuizResult, ExamResult, CourseId } from '@/types'
+import type { QuizResult, ExamResult, CourseId, ExerciseAssessment, ExerciseResult } from '@/types'
 
 interface ProgressStore {
   completedLessons: Set<string>
+  exerciseResults: ExerciseResult[]
   quizResults: QuizResult[]
   examResults: ExamResult[]
   isLoaded: boolean
 
   loadProgress: (userId: string) => Promise<void>
   completeLesson: (userId: string, lessonId: string, moduleId: string, courseId: CourseId) => Promise<void>
-  recordExercise: (userId: string, exerciseId: string, moduleId: string, courseId: CourseId, correct: boolean) => Promise<void>
+  recordExercise: (userId: string, exerciseId: string, moduleId: string, courseId: CourseId, assessment: ExerciseAssessment) => Promise<void>
   recordQuizResult: (result: Omit<QuizResult, 'id'>) => Promise<void>
   recordExamResult: (result: Omit<ExamResult, 'id'>) => Promise<void>
   isLessonCompleted: (lessonId: string) => boolean
@@ -28,18 +30,21 @@ interface ProgressStore {
 
 export const useProgressStore = create<ProgressStore>()((set, get) => ({
   completedLessons: new Set(),
+  exerciseResults: [],
   quizResults: [],
   examResults: [],
   isLoaded: false,
 
   loadProgress: async (userId: string) => {
-    const [lessons, quizzes, exams] = await Promise.all([
+    const [lessons, exercises, quizzes, exams] = await Promise.all([
       getCompletedLessons(userId),
+      getExerciseResults(userId),
       getQuizResults(userId),
       getExamResults(userId),
     ])
     set({
       completedLessons: new Set(lessons),
+      exerciseResults: exercises,
       quizResults: quizzes,
       examResults: exams,
       isLoaded: true,
@@ -53,8 +58,10 @@ export const useProgressStore = create<ProgressStore>()((set, get) => ({
     }))
   },
 
-  recordExercise: async (userId, exerciseId, moduleId, courseId, correct) => {
-    await saveExerciseResult(userId, exerciseId, moduleId, courseId, correct)
+  recordExercise: async (userId, exerciseId, moduleId, courseId, assessment) => {
+    await saveExerciseResult(userId, exerciseId, moduleId, courseId, assessment)
+    const exercises = await getExerciseResults(userId)
+    set({ exerciseResults: exercises })
   },
 
   recordQuizResult: async (result) => {
@@ -80,6 +87,7 @@ export const useProgressStore = create<ProgressStore>()((set, get) => ({
   reset: () => {
     set({
       completedLessons: new Set(),
+      exerciseResults: [],
       quizResults: [],
       examResults: [],
       isLoaded: false,

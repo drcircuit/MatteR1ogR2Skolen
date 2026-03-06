@@ -4,6 +4,7 @@ import type {
   ExerciseResult,
   QuizResult,
   ExamResult,
+  ExerciseAssessment,
 } from '@/types'
 
 class MatteSkoleDatabase extends Dexie {
@@ -53,14 +54,17 @@ export async function saveExerciseResult(
   exerciseId: string,
   moduleId: string,
   courseId: string,
-  correct: boolean,
+  assessment: ExerciseAssessment,
 ): Promise<void> {
   const existing = await db.exerciseResults
     .where({ userId, exerciseId })
     .first()
   if (existing?.id !== undefined) {
     await db.exerciseResults.update(existing.id, {
-      correct,
+      correct: assessment.correct,
+      submittedAnswer: assessment.submittedAnswer,
+      assessmentFeedback: assessment.assessmentFeedback,
+      assessmentScore: assessment.assessmentScore,
       answeredAt: new Date().toISOString(),
       attemptCount: (existing.attemptCount || 0) + 1,
     })
@@ -70,7 +74,10 @@ export async function saveExerciseResult(
       exerciseId,
       moduleId,
       courseId: courseId as import('@/types').CourseId,
-      correct,
+      correct: assessment.correct,
+      submittedAnswer: assessment.submittedAnswer,
+      assessmentFeedback: assessment.assessmentFeedback,
+      assessmentScore: assessment.assessmentScore,
       answeredAt: new Date().toISOString(),
       attemptCount: 1,
     })
@@ -99,6 +106,10 @@ export async function getCompletedLessons(userId: string): Promise<string[]> {
 
 export async function getQuizResults(userId: string): Promise<QuizResult[]> {
   return db.quizResults.where({ userId }).toArray()
+}
+
+export async function getExerciseResults(userId: string): Promise<ExerciseResult[]> {
+  return db.exerciseResults.where({ userId }).toArray()
 }
 
 export async function getExamResults(userId: string): Promise<ExamResult[]> {

@@ -62,6 +62,7 @@ export interface BaseExercise {
   id: string
   moduleId: string
   lessonId?: string
+  competenceGoalRefs?: string[]
   type: ExerciseType
   question: string
   hint?: string
@@ -124,8 +125,18 @@ export interface ExerciseResult {
   moduleId: string
   courseId: CourseId
   correct: boolean
+  submittedAnswer?: string
+  assessmentFeedback?: string
+  assessmentScore?: number
   answeredAt: string
   attemptCount: number
+}
+
+export interface ExerciseAssessment {
+  correct: boolean
+  submittedAnswer?: string
+  assessmentFeedback?: string
+  assessmentScore?: number
 }
 
 export interface QuizResult {

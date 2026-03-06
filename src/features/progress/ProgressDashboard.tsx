@@ -1,6 +1,5 @@
 import { useProgress } from '@/hooks/useProgress'
-import { r1Course } from '@/data/r1'
-import { r2Course } from '@/data/r2'
+import { contentRepository } from '@/data/contentRepository'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Card } from '@/components/ui/Card'
 import { Link } from 'react-router-dom'
@@ -8,8 +7,12 @@ import { Link } from 'react-router-dom'
 export function ProgressDashboard() {
   const { completedLessons, quizResults, examResults } = useProgress()
 
-  const r1LessonIds = r1Course.modules.flatMap((m) => m.lessons.map((l) => l.id))
-  const r2LessonIds = r2Course.modules.flatMap((m) => m.lessons.map((l) => l.id))
+  const r1Course = contentRepository.getCourse('r1')
+  const r2Course = contentRepository.getCourse('r2')
+  if (!r1Course || !r2Course) return null
+
+  const r1LessonIds = contentRepository.getAllLessonIds('r1')
+  const r2LessonIds = contentRepository.getAllLessonIds('r2')
 
   const r1Progress = r1LessonIds.length > 0
     ? Math.round((r1LessonIds.filter((id) => completedLessons.has(id)).length / r1LessonIds.length) * 100)

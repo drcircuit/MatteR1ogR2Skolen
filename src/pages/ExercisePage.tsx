@@ -1,36 +1,23 @@
 import { useParams, Navigate, Link } from 'react-router-dom'
-import type { CourseId, Exercise } from '@/types'
-import { r1Course } from '@/data/r1'
-import { r2Course } from '@/data/r2'
+import type { CourseId } from '@/types'
+import { contentRepository } from '@/data/contentRepository'
 import { ExerciseCard } from '@/features/exercises/ExerciseCard'
 import { useProgress } from '@/hooks/useProgress'
 import { useSettingsStore } from '@/store/settingsStore'
-
-function getExercisesForLesson(
-  moduleExercises: Exercise[],
-  moduleLessonCount: number,
-  lessonId: string,
-  lessonIndex: number,
-) {
-  return moduleExercises.filter((exercise, idx) => exercise.lessonId === lessonId
-    || (exercise.lessonId === undefined && moduleLessonCount > 0 && idx % moduleLessonCount === lessonIndex))
-}
 
 export default function ExercisePage() {
   const { courseId, moduleId, lessonId } = useParams<{ courseId: string; moduleId: string; lessonId?: string }>()
   const { recordExerciseAssessment, getExerciseResult } = useProgress()
   const showHints = useSettingsStore((s) => s.showHints)
 
-  const course = courseId === 'r1' ? r1Course : courseId === 'r2' ? r2Course : null
+  const course = contentRepository.getCourse(courseId)
   if (!course) return <Navigate to="/dashboard" replace />
 
-  const module = course.modules.find((m) => m.id === moduleId)
+  const module = contentRepository.getModule(courseId, moduleId)
   if (!module) return <Navigate to={`/kurs/${courseId}`} replace />
-  const lesson = lessonId ? module.lessons.find((l) => l.id === lessonId) : null
-  const lessonIndex = lesson ? module.lessons.findIndex((l) => l.id === lesson.id) : -1
-  const exercises = lesson
-    ? getExercisesForLesson(module.exercises, module.lessons.length, lesson.id, lessonIndex)
-    : module.exercises
+  const lessonContext = contentRepository.getLessonContext(courseId, moduleId, lessonId)
+  const lesson = lessonContext?.lesson ?? null
+  const exercises = contentRepository.getExercisesForModule(courseId, moduleId, lessonId)
 
   const competenceRefs = lesson?.competenceGoalRefs
     ?? module.competenceGoals?.map((goal) => goal.id)

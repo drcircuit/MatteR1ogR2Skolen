@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useParams, Navigate, Link } from 'react-router-dom'
 import type { CourseId, QuestionResult } from '@/types'
-import { r1Course } from '@/data/r1'
-import { r2Course } from '@/data/r2'
+import { contentRepository } from '@/data/contentRepository'
 import { ExamRunner } from '@/features/exams/ExamRunner'
 import { ExamResultView } from '@/features/exams/ExamResult'
 import { useProgress } from '@/hooks/useProgress'
@@ -18,13 +17,14 @@ export default function ExamPage() {
   const { recordQuizResult } = useProgress()
   const user = useAuthStore((s) => s.user)
 
-  const course = courseId === 'r1' ? r1Course : courseId === 'r2' ? r2Course : null
+  const course = contentRepository.getCourse(courseId)
   if (!course) return <Navigate to="/dashboard" replace />
 
-  const module = course.modules.find((m) => m.id === moduleId)
+  const module = contentRepository.getModule(courseId, moduleId)
   if (!module) return <Navigate to={`/kurs/${courseId}`} replace />
 
-  const quiz = module.quiz
+  const quiz = contentRepository.getQuiz(courseId, moduleId)
+  if (!quiz) return <Navigate to={`/kurs/${courseId}/modul/${moduleId}`} replace />
 
   const handleComplete = (results: QuestionResult[], duration: number) => {
     const correct = results.filter((r) => r.correct).length

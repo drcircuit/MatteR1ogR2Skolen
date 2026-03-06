@@ -1,7 +1,6 @@
 import { useParams, Navigate, Link } from 'react-router-dom'
 import type { CourseId } from '@/types'
-import { r1Course } from '@/data/r1'
-import { r2Course } from '@/data/r2'
+import { contentRepository } from '@/data/contentRepository'
 import { LessonCard } from '@/features/curriculum/LessonCard'
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Button } from '@/components/ui/Button'
@@ -11,10 +10,10 @@ export default function ModulePage() {
   const { courseId, moduleId } = useParams<{ courseId: string; moduleId: string }>()
   const { isLessonCompleted, getModuleLessonProgress } = useProgress()
 
-  const course = courseId === 'r1' ? r1Course : courseId === 'r2' ? r2Course : null
+  const course = contentRepository.getCourse(courseId)
   if (!course) return <Navigate to="/dashboard" replace />
 
-  const module = course.modules.find((m) => m.id === moduleId)
+  const module = contentRepository.getModule(courseId, moduleId)
   if (!module) return <Navigate to={`/kurs/${courseId}`} replace />
 
   const lessonIds = module.lessons.map((l) => l.id)

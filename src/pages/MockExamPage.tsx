@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import type { Exercise, CourseId, QuestionResult } from '@/types'
-import { r1Course } from '@/data/r1'
-import { r2Course } from '@/data/r2'
+import { contentRepository } from '@/data/contentRepository'
 import { ExamRunner } from '@/features/exams/ExamRunner'
 import { ExamResultView } from '@/features/exams/ExamResult'
 import { Button } from '@/components/ui/Button'
@@ -11,16 +10,7 @@ import { useAuthStore } from '@/store/authStore'
 type ExamCourse = 'r1' | 'r2' | 'begge'
 
 function getRandomQuestions(courseFilter: ExamCourse, count: number): Exercise[] {
-  const courses = courseFilter === 'r1' ? [r1Course]
-    : courseFilter === 'r2' ? [r2Course]
-    : [r1Course, r2Course]
-
-  const allExercises: Exercise[] = courses.flatMap((c) =>
-    c.modules.flatMap((m) => [
-      ...m.exercises,
-      ...m.quiz.questions,
-    ] as Exercise[]),
-  )
+  const allExercises = contentRepository.getAllExercises(courseFilter)
 
   const shuffled = allExercises.sort(() => Math.random() - 0.5)
   return shuffled.slice(0, Math.min(count, shuffled.length))

@@ -7,7 +7,7 @@ interface AuthStore {
   user: User | null
   isAuthenticated: boolean
   login: (username: string, password: string) => Promise<boolean>
-  register: (username: string, password: string, displayName?: string) => Promise<{ success: boolean; error?: string }>
+  register: (username: string, password: string) => Promise<{ success: boolean; error?: string }>
   logout: () => void
   updateDisplayName: (name: string) => void
 }
@@ -49,7 +49,6 @@ export const useAuthStore = create<AuthStore>()(
       register: async (
         username: string,
         password: string,
-        displayName?: string,
       ): Promise<{ success: boolean; error?: string }> => {
         const users = getStoredUsers()
         const exists = users.some(
@@ -70,7 +69,7 @@ export const useAuthStore = create<AuthStore>()(
           id: crypto.randomUUID(),
           username,
           passwordHash,
-          displayName: displayName || username,
+          displayName: username,
           createdAt: new Date().toISOString(),
         }
         users.push(newUser)

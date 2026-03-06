@@ -7,7 +7,6 @@ import { Card } from '@/components/ui/Card'
 
 export function RegisterForm() {
   const [username, setUsername] = useState('')
-  const [displayName, setDisplayName] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState('')
@@ -26,7 +25,7 @@ export function RegisterForm() {
     }
 
     setLoading(true)
-    const result = await register(username.trim(), password, displayName.trim() || undefined)
+    const result = await register(username.trim(), password)
     setLoading(false)
 
     if (result.success) {
@@ -56,14 +55,6 @@ export function RegisterForm() {
           required
           autoComplete="username"
           autoFocus
-        />
-        <Input
-          label="Visningsnavn (valgfritt)"
-          type="text"
-          value={displayName}
-          onChange={(e) => setDisplayName(e.target.value)}
-          placeholder="Ditt navn"
-          autoComplete="name"
         />
         <Input
           label="Passord"

@@ -20,6 +20,7 @@ describe('RegisterForm', () => {
       </BrowserRouter>,
     )
     expect(screen.getByLabelText('Brukernavn')).toBeInTheDocument()
+    expect(screen.queryByLabelText(/Visningsnavn/)).not.toBeInTheDocument()
     expect(screen.getByLabelText(/Passord/)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Opprett konto/ })).toBeInTheDocument()
   })

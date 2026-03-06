@@ -108,7 +108,14 @@ function getAllExercises(filter: ExamCourseFilter = 'begge'): Exercise[] {
 }
 
 function shuffle<T>(items: T[]): T[] {
-  return [...items].sort(() => Math.random() - 0.5)
+  const shuffled = [...items]
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const temp = shuffled[i]
+    shuffled[i] = shuffled[j]
+    shuffled[j] = temp
+  }
+  return shuffled
 }
 
 function getMockExamQuestions(

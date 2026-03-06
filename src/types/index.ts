@@ -17,6 +17,13 @@ export interface AuthState {
 
 export type CourseId = 'r1' | 'r2'
 
+export interface CompetenceGoal {
+  id: string        // e.g. 'r1-km1', 'r2-km3'
+  number: number    // 1–12
+  text: string      // The full official Udir text in bokmål
+  courseId: CourseId
+}
+
 export interface Course {
   id: CourseId
   title: string
@@ -33,6 +40,7 @@ export interface Module {
   lessons: Lesson[]
   exercises: Exercise[]
   quiz: Quiz
+  competenceGoals: CompetenceGoal[]
 }
 
 export interface Lesson {
@@ -43,6 +51,7 @@ export interface Lesson {
   learningGoals: string[]
   order: number
   estimatedMinutes: number
+  competenceGoalRefs: string[]  // e.g. ['r1-km2', 'r1-km3']
 }
 
 // ─── Oppgaver og øvinger ───────────────────────────────────────────────────

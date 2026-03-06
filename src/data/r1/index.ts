@@ -12,6 +12,26 @@ export const r1Course: Course = {
       title: 'Algebra og funksjoner',
       description: 'Polynomer, rasjonale funksjoner, eksponentialfunksjoner og logaritmer.',
       order: 1,
+      competenceGoals: [
+        {
+          id: 'r1-km2',
+          number: 2,
+          text: 'forstå begrepene vekstfart, grenseverdi, derivasjon og kontinuitet, og bruke disse for å løse praktiske problemer',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km3',
+          number: 3,
+          text: 'bruke ulike strategier for å utforske og bestemme grenseverdier til funksjoner, og utforske og argumentere for anvendelser av grenseverdier',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km9',
+          number: 9,
+          text: 'gjøre rede for og argumentere for om en funksjon er kontinuerlig eller diskontinuerlig i et punkt i et definisjonsområde, og gi eksempler på anvendelser av diskontinuerlige funksjoner',
+          courseId: 'r1',
+        },
+      ],
       lessons: [
         {
           id: 'r1-m1-l1',
@@ -398,6 +418,38 @@ der $k$ er forfallskonstanten i $f(t) = f_0 \\cdot e^{-kt}$.
       title: 'Geometri – vektorer og trigonometri',
       description: 'Vektorer i planet, skalarprodukt, og trigonometriske funksjoner.',
       order: 2,
+      competenceGoals: [
+        {
+          id: 'r1-km2',
+          number: 2,
+          text: 'forstå begrepene vekstfart, grenseverdi, derivasjon og kontinuitet, og bruke disse for å løse praktiske problemer',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km4',
+          number: 4,
+          text: 'bestemme den deriverte i et punkt geometrisk, algebraisk og ved numeriske metoder, og gi eksempler på funksjoner som ikke er deriverbare i gitte punkter',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km5',
+          number: 5,
+          text: 'analysere og tolke ulike funksjoner ved å bruke derivasjon',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km6',
+          number: 6,
+          text: 'anvende derivasjon til å analysere og tolke egne matematiske modeller av reelle datasett',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km10',
+          number: 10,
+          text: 'utforske, analysere og derivere ulike funksjoner og deres omvendte funksjoner, og gjøre rede for egenskaper til og sammenhenger mellom slike funksjoner',
+          courseId: 'r1',
+        },
+      ],
       lessons: [
         {
           id: 'r1-m2-l1',
@@ -604,6 +656,20 @@ For alle løsninger: $x = \\frac{\\pi}{6} + 2\\pi k$ eller $x = \\frac{5\\pi}{6}
       title: 'Kombinatorikk og sannsynlighet',
       description: 'Telleprinsipper, permutasjoner, kombinasjoner og sannsynlighetsregning.',
       order: 3,
+      competenceGoals: [
+        {
+          id: 'r1-km7',
+          number: 7,
+          text: 'utforske og forstå regneregler for potenser og logaritmer, og bruke ulike strategier for å løse eksponentialligninger og logaritmeligninger',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km8',
+          number: 8,
+          text: 'modellere og analysere eksponentiell og logistisk vekst i reelle datasett',
+          courseId: 'r1',
+        },
+      ],
       lessons: [
         {
           id: 'r1-m3-l1',
@@ -780,6 +846,20 @@ $$P(\\text{ess}_1 \\cap \\text{ess}_2) = P(\\text{ess}_1) \\cdot P(\\text{ess}_2
       title: 'Derivasjon',
       description: 'Grenseverdier, derivasjonsregler og optimalisering.',
       order: 4,
+      competenceGoals: [
+        {
+          id: 'r1-km11',
+          number: 11,
+          text: 'anvende parameterframstillinger til linjer og bruke parameterframstillinger til å løse naturvitenskapelige problemer',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km12',
+          number: 12,
+          text: 'forstå begrepet vektor og regneregler for vektorer i planet, og bruke vektorer til å beregne ulike størrelser i planet',
+          courseId: 'r1',
+        },
+      ],
       lessons: [
         {
           id: 'r1-m4-l1',
@@ -996,6 +1076,26 @@ Maksimalt areal: $A(25) = 25 \\cdot 50 = 1250 \\text{ m}^2$
       title: 'Integrasjon',
       description: 'Ubestemte og bestemte integraler, integrasjonsmetoder og arealberegning.',
       order: 5,
+      competenceGoals: [
+        {
+          id: 'r1-km1',
+          number: 1,
+          text: 'planlegge og gjennomføre et selvstendig arbeid med reelle datasett knyttet til naturvitenskapelige temaer og forhold, og analysere og presentere funn',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km6',
+          number: 6,
+          text: 'anvende derivasjon til å analysere og tolke egne matematiske modeller av reelle datasett',
+          courseId: 'r1',
+        },
+        {
+          id: 'r1-km8',
+          number: 8,
+          text: 'modellere og analysere eksponentiell og logistisk vekst i reelle datasett',
+          courseId: 'r1',
+        },
+      ],
       lessons: [
         {
           id: 'r1-m5-l1',

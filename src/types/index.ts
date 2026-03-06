@@ -40,7 +40,7 @@ export interface Module {
   lessons: Lesson[]
   exercises: Exercise[]
   quiz: Quiz
-  competenceGoals: CompetenceGoal[]
+  competenceGoals?: CompetenceGoal[]
 }
 
 export interface Lesson {
@@ -51,7 +51,7 @@ export interface Lesson {
   learningGoals: string[]
   order: number
   estimatedMinutes: number
-  competenceGoalRefs: string[]  // e.g. ['r1-km2', 'r1-km3']
+  competenceGoalRefs?: string[]  // e.g. ['r1-km2', 'r1-km3']
 }
 
 // ─── Oppgaver og øvinger ───────────────────────────────────────────────────

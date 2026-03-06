@@ -12,6 +12,20 @@ export const r2Course: Course = {
       title: 'Funksjoner',
       description: 'Sammensatte funksjoner, inverse funksjoner og periodiske funksjoner.',
       order: 1,
+      competenceGoals: [
+        {
+          id: 'r2-km1',
+          number: 1,
+          text: 'utforske egenskaper ved ulike rekker og gjøre rede for praktiske anvendelser av egenskaper ved rekker',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km2',
+          number: 2,
+          text: 'utforske rekursive sammenhenger ved å bruke programmering og presentere egne framgangsmåter',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m1-l1',
@@ -192,6 +206,26 @@ $$\\cos 2x = \\cos(x+x) = \\cos^2 x - \\sin^2 x = (1 - \\sin^2 x) - \\sin^2 x = 
       title: 'Avansert derivasjon og integrasjon',
       description: 'Derivasjon av trigonometriske funksjoner, delbrøkoppspalting, delvis integrasjon og differensialligninger.',
       order: 2,
+      competenceGoals: [
+        {
+          id: 'r2-km3',
+          number: 3,
+          text: 'gjøre rede for integral som en grenseverdi av en følge av summer, og tolke betydningen av denne grenseverdien i ulike situasjoner',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km4',
+          number: 4,
+          text: 'gjøre rede for analysens fundamentalteorem og gjøre rede for konsekvenser av teoremet',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km5',
+          number: 5,
+          text: 'utvikle algoritmer for å beregne integraler numerisk, og bruke programmering til å utføre algoritmene',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m2-l1',
@@ -385,6 +419,26 @@ $$\\frac{dy}{dt} = ky \\Rightarrow y(t) = y_0 e^{kt}$$
       title: 'Vektorer i rommet',
       description: '3D-vektorer, kryssprodukt, linjer og plan i rommet.',
       order: 3,
+      competenceGoals: [
+        {
+          id: 'r2-km6',
+          number: 6,
+          text: 'gi eksempler på ulike situasjoner som kan modelleres ved å bruke ulike matematiske funksjoner, og modellere og analysere slike situasjoner ved å bruke reelle datasett',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km7',
+          number: 7,
+          text: 'anvende derivasjon og integrasjon til å analysere og tolke egne matematiske modeller av reelle datasett',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km8',
+          number: 8,
+          text: 'analysere og tolke ulike funksjoner ved å bruke derivasjon og integrasjon, og anvende integrasjon til å beregne ulike mål av omdreiningslegemer',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m3-l1',
@@ -488,6 +542,20 @@ $$\\begin{pmatrix} x \\\\ y \\\\ z \\end{pmatrix} = \\begin{pmatrix} x_0 \\\\ y_
       title: 'Komplekse tall',
       description: 'Komplekse tall, polær form, Eulers formel og de Moivres teorem.',
       order: 4,
+      competenceGoals: [
+        {
+          id: 'r2-km9',
+          number: 9,
+          text: 'anvende parameterframstillinger til kurver og bruke parameterframstillinger til å løse naturvitenskapelige problemer inkludert problemer knyttet til fart og akselerasjon',
+          courseId: 'r2',
+        },
+        {
+          id: 'r2-km10',
+          number: 10,
+          text: 'utforske og forstå regneregler for vektorer i rommet, og bruke vektorer til å beregne ulike størrelser i rommet',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m4-l1',
@@ -616,6 +684,14 @@ $$w_k = r^{1/n} e^{i(\\theta + 2\\pi k)/n}, \\quad k = 0, 1, \\ldots, n-1$$
       title: 'Sannsynlighet og statistikk',
       description: 'Diskrete og kontinuerlige sannsynlighetsfordelinger, binomialfordeling og normalfordeling.',
       order: 5,
+      competenceGoals: [
+        {
+          id: 'r2-km11',
+          number: 11,
+          text: 'utforske egenskaper ved radianer og trigonometriske funksjoner og identiteter og anvende disse egenskapene til å løse praktiske problemer',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m5-l1',
@@ -730,6 +806,14 @@ $$f(x) = \\frac{1}{\\sigma\\sqrt{2\\pi}} e^{-\\frac{(x-\\mu)^2}{2\\sigma^2}}$$
       title: 'Lineær algebra',
       description: 'Matriser, determinanter og løsning av lineære ligningssystemer.',
       order: 6,
+      competenceGoals: [
+        {
+          id: 'r2-km12',
+          number: 12,
+          text: 'analysere og forstå matematiske bevis, forklare de bærende ideene i et matematisk bevis og utvikle egne bevis',
+          courseId: 'r2',
+        },
+      ],
       lessons: [
         {
           id: 'r2-m6-l1',

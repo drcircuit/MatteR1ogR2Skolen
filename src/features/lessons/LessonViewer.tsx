@@ -15,6 +15,8 @@ interface LessonViewerProps {
   prevLesson?: Lesson | null
 }
 
+const AI_TUTOR_CHAT_HEIGHT_CLASS = 'h-[560px]'
+
 export function LessonViewer({ lesson, module, courseId, nextLesson, prevLesson }: LessonViewerProps) {
   const [showGoals, setShowGoals] = useState(false)
   const [completed, setCompleted] = useState(false)
@@ -91,7 +93,7 @@ export function LessonViewer({ lesson, module, courseId, nextLesson, prevLesson 
         <p className="text-sm text-gray-500 mb-3">
           Still spørsmål om akkurat denne leksjonen og få steg-for-steg veiledning fra AI-faglæreren.
         </p>
-        <div className="h-[560px]">
+        <div className={AI_TUTOR_CHAT_HEIGHT_CLASS}>
           <AITutorChat
             context={{
               courseId,

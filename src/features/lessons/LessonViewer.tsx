@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import type { Lesson, Module, CourseId } from '@/types'
 import { LessonContent } from './LessonContent'
+import { AITutorChat } from '@/features/ai-tutor/AITutorChat'
 import { Button } from '@/components/ui/Button'
 import { Badge } from '@/components/ui/Badge'
 import { useProgress } from '@/hooks/useProgress'
@@ -14,12 +15,17 @@ interface LessonViewerProps {
   prevLesson?: Lesson | null
 }
 
+const AI_TUTOR_CHAT_HEIGHT_CLASS = 'h-[560px]'
+
 export function LessonViewer({ lesson, module, courseId, nextLesson, prevLesson }: LessonViewerProps) {
   const [showGoals, setShowGoals] = useState(false)
   const [completed, setCompleted] = useState(false)
   const navigate = useNavigate()
   const { completeLesson, isLessonCompleted } = useProgress()
   const alreadyDone = isLessonCompleted(lesson.id)
+  const competenceRefs = lesson.competenceGoalRefs
+    ?? module.competenceGoals?.map((goal) => goal.id)
+    ?? []
 
   const handleComplete = () => {
     completeLesson(lesson.id, module.id, courseId)
@@ -75,6 +81,29 @@ export function LessonViewer({ lesson, module, courseId, nextLesson, prevLesson 
       <div className="bg-white rounded-2xl border border-gray-200 p-6 mb-6">
         <LessonContent content={lesson.content} />
       </div>
+
+      {competenceRefs.length > 0 && (
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mb-6 text-sm text-blue-900">
+          <span className="font-semibold">Dekker kompetansemål:</span> {competenceRefs.join(', ')}
+        </div>
+      )}
+
+      <section className="mb-6">
+        <h2 className="text-lg font-semibold text-gray-900 mb-1">🤖 Interaktiv leksjonsveileder</h2>
+        <p className="text-sm text-gray-500 mb-3">
+          Still spørsmål om akkurat denne leksjonen og få steg-for-steg veiledning fra AI-faglæreren.
+        </p>
+        <div className={AI_TUTOR_CHAT_HEIGHT_CLASS}>
+          <AITutorChat
+            context={{
+              courseId,
+              moduleTitle: module.title,
+              lessonTitle: lesson.title,
+              lessonContent: lesson.content,
+            }}
+          />
+        </div>
+      </section>
 
       {/* Fullfør-knapp */}
       {!alreadyDone && !completed && (

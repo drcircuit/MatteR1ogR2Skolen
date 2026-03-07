@@ -18,11 +18,14 @@ const courseById = new Map<CourseId, Course>(
 )
 
 const moduleByKey = new Map<string, Module>()
+const moduleCourseByModuleId = new Map<string, CourseId>()
 const lessonContextByKey = new Map<string, LessonContext>()
+const lessonContextByLessonId = new Map<string, LessonContext>()
 
 for (const course of courses) {
   for (const module of course.modules) {
     moduleByKey.set(`${course.id}:${module.id}`, module)
+    moduleCourseByModuleId.set(module.id, course.id)
     module.lessons.forEach((lesson, lessonIndex) => {
       lessonContextByKey.set(
         `${course.id}:${module.id}:${lesson.id}`,
@@ -33,6 +36,12 @@ for (const course of courses) {
           lessonIndex,
         },
       )
+      lessonContextByLessonId.set(lesson.id, {
+        course,
+        module,
+        lesson,
+        lessonIndex,
+      })
     })
   }
 }
@@ -98,6 +107,43 @@ function getAllExercises(filter: ExamCourseFilter = 'begge'): Exercise[] {
   )
 }
 
+function shuffle<T>(items: T[]): T[] {
+  const shuffled = [...items]
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(Math.random() * (i + 1))
+    const temp = shuffled[i]
+    shuffled[i] = shuffled[j]
+    shuffled[j] = temp
+  }
+  return shuffled
+}
+
+function getMockExamQuestions(
+  filter: ExamCourseFilter = 'begge',
+  count = 20,
+  completedLessonIds: Iterable<string> = [],
+): Exercise[] {
+  const allExercises = getAllExercises(filter)
+  const uniqueExercises = Array.from(new Map(allExercises.map((exercise) => [exercise.id, exercise])).values())
+  const completedModuleKeys = new Set<string>()
+
+  for (const lessonId of completedLessonIds) {
+    const lessonContext = lessonContextByLessonId.get(lessonId)
+    if (!lessonContext) continue
+    completedModuleKeys.add(`${lessonContext.course.id}:${lessonContext.module.id}`)
+  }
+
+  const prioritized = uniqueExercises.filter((exercise) =>
+    completedModuleKeys.has(`${moduleCourseByModuleId.get(exercise.moduleId)}:${exercise.moduleId}`),
+  )
+  const prioritizedIds = new Set(prioritized.map((exercise) => exercise.id))
+  const remaining = uniqueExercises.filter((exercise) => !prioritizedIds.has(exercise.id))
+  const shuffledPrioritized = shuffle(prioritized)
+  const shuffledRemaining = shuffle(remaining)
+
+  return [...shuffledPrioritized, ...shuffledRemaining].slice(0, Math.min(count, uniqueExercises.length))
+}
+
 function getAllLessonIds(courseId: CourseId): string[] {
   const course = courseById.get(courseId)
   if (!course) return []
@@ -112,5 +158,6 @@ export const contentRepository = {
   getExercisesForModule,
   getQuiz,
   getAllExercises,
+  getMockExamQuestions,
   getAllLessonIds,
 }

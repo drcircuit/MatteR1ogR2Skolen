@@ -55,4 +55,11 @@ describe('contentRepository', () => {
     expect(r2Exercises.length).toBeGreaterThan(0)
     expect(both.length).toBe(r1Exercises.length + r2Exercises.length)
   })
+
+  it('prioriterer oppgaver fra moduler med fullførte leksjoner i prøveeksamen', () => {
+    const questions = contentRepository.getMockExamQuestions('r1', 2, ['r1-m1-l1'])
+
+    expect(questions).toHaveLength(2)
+    expect(questions.every((question) => question.moduleId === 'r1-m1')).toBe(true)
+  })
 })

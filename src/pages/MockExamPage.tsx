@@ -9,13 +9,6 @@ import { useAuthStore } from '@/store/authStore'
 
 type ExamCourse = 'r1' | 'r2' | 'begge'
 
-function getRandomQuestions(courseFilter: ExamCourse, count: number): Exercise[] {
-  const allExercises = contentRepository.getAllExercises(courseFilter)
-
-  const shuffled = allExercises.sort(() => Math.random() - 0.5)
-  return shuffled.slice(0, Math.min(count, shuffled.length))
-}
-
 export default function MockExamPage() {
   const [started, setStarted] = useState(false)
   const [courseFilter, setCourseFilter] = useState<ExamCourse>('begge')
@@ -26,11 +19,11 @@ export default function MockExamPage() {
     durationSeconds: number
   } | null>(null)
 
-  const { recordExamResult } = useProgress()
+  const { completedLessons, recordExamResult } = useProgress()
   const user = useAuthStore((s) => s.user)
 
   const handleStart = () => {
-    const qs = getRandomQuestions(courseFilter, questionCount)
+    const qs = contentRepository.getMockExamQuestions(courseFilter, questionCount, completedLessons)
     setQuestions(qs)
     setStarted(true)
     setExamResult(null)
@@ -139,6 +132,7 @@ export default function MockExamPage() {
           <ul className="space-y-1 text-xs">
             <li>• Lukk alle andre faner og hjelpemidler</li>
             <li>• Spørsmålene er tilfeldig valgt fra pensum</li>
+            <li>• Oppgavene prioriterer moduler fra leksjoner du har fullført</li>
             <li>• Eksamenen stopper automatisk etter 60 min</li>
             <li>• Du kan ikke pause eksamen underveis</li>
           </ul>
